@@ -1,0 +1,25 @@
+{
+  "name": "5_oop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@babel/cli": "^7.28.6",
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.2",
+    "eslint": "^10.1.0",
+    "eslint-plugin-jest": "^29.15.1",
+    "jest": "^30.3.0"
+  },
+  "dependencies": {
+    "core-js": "^3.49.0"
+  }
+}
