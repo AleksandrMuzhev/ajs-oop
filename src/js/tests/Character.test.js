@@ -99,3 +99,105 @@ describe('Zombie class', () => {
     expect(zombie.level).toBe(1);
   });
 });
+
+describe('Character methods', () => {
+  describe('levelUp', () => {
+    test('should increase level, attack, defence and restore health', () => {
+      const character = new Bowman('Robin');
+      character.health = 50;
+      character.levelUp();
+      
+      expect(character.level).toBe(2);
+      expect(character.attack).toBe(30); // 25 * 1.2 = 30
+      expect(character.defence).toBe(30); // 25 * 1.2 = 30
+      expect(character.health).toBe(100);
+    });
+    
+    test('should throw error if health is 0', () => {
+      const character = new Bowman('Robin');
+      character.health = 0;
+      
+      expect(() => character.levelUp()).toThrow('Нельзя повысить уровень умершего персонажа');
+    });
+    
+    test('should throw error if health is negative', () => {
+      const character = new Bowman('Robin');
+      character.health = -10;
+      
+      expect(() => character.levelUp()).toThrow('Нельзя повысить уровень умершего персонажа');
+    });
+    
+    test('should correctly calculate stats for Swordsman', () => {
+      const swordsman = new Swordsman('Arthur');
+      swordsman.health = 75;
+      swordsman.levelUp();
+      
+      expect(swordsman.level).toBe(2);
+      expect(swordsman.attack).toBe(48); // 40 * 1.2 = 48
+      expect(swordsman.defence).toBe(12); // 10 * 1.2 = 12
+      expect(swordsman.health).toBe(100);
+    });
+    
+    test('should correctly calculate stats for Magician', () => {
+      const magician = new Magician('Gandalf');
+      magician.health = 30;
+      magician.levelUp();
+      
+      expect(magician.level).toBe(2);
+      expect(magician.attack).toBe(12); // 10 * 1.2 = 12
+      expect(magician.defence).toBe(48); // 40 * 1.2 = 48
+      expect(magician.health).toBe(100);
+    });
+  });
+  
+  describe('damage', () => {
+    test('should reduce health correctly', () => {
+      const character = new Bowman('Robin');
+      character.damage(50);
+      
+      // health -= 50 * (1 - 25/100) = 50 * 0.75 = 37.5
+      expect(character.health).toBe(62.5);
+    });
+    
+    test('should not reduce health below 0', () => {
+      const character = new Bowman('Robin');
+      character.damage(200);
+      
+      expect(character.health).toBe(0);
+    });
+    
+    test('should not apply damage if health is already 0', () => {
+      const character = new Bowman('Robin');
+      character.health = 0;
+      character.damage(50);
+      
+      expect(character.health).toBe(0);
+    });
+    
+    test('should calculate damage correctly for Swordsman', () => {
+      const swordsman = new Swordsman('Arthur');
+      swordsman.damage(100);
+      
+      // health -= 100 * (1 - 10/100) = 100 * 0.9 = 90
+      expect(swordsman.health).toBe(10);
+    });
+    
+    test('should calculate damage correctly for Magician with high defence', () => {
+      const magician = new Magician('Gandalf');
+      magician.damage(100);
+      
+      // health -= 100 * (1 - 40/100) = 100 * 0.6 = 60
+      expect(magician.health).toBe(40);
+    });
+    
+    test('should handle multiple damage applications', () => {
+      const character = new Bowman('Robin');
+      character.damage(30);
+      character.damage(30);
+      
+      // Первый удар: 100 - 22.5 = 77.5
+      // Второй удар: 77.5 - 22.5 = 55
+      expect(character.health).toBe(55);
+    });
+  });
+});
